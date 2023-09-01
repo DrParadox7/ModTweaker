@@ -3,6 +3,7 @@ package modtweaker2.mods.thaumcraft.research;
 import minetweaker.IUndoableAction;
 import modtweaker2.mods.thaumcraft.ThaumcraftHelper;
 import thaumcraft.api.research.ResearchCategories;
+import thaumcraft.api.research.ResearchItem;
 
 public class AddPrereq implements IUndoableAction {
     String key;
@@ -53,8 +54,12 @@ public class AddPrereq implements IUndoableAction {
 
     @Override
     public void undo() {
-        if (!hidden) ResearchCategories.researchCategories.get(tab).research.get(key).setParents(oldPrereqs);
-        else ResearchCategories.researchCategories.get(tab).research.get(key).setParentsHidden(oldPrereqs);
+        ResearchItem research = ResearchCategories.researchCategories.get(tab).research.get(key);
+        if (research != null) {
+            if (!hidden)
+                research.setParents(oldPrereqs);
+            else research.setParentsHidden(oldPrereqs);
+        }
     }
 
     @Override
